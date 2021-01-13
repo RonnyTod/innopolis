@@ -6,6 +6,11 @@
     <SomeComponent>
       <ValidateComponent id="3">
         <ValidateComponent id="4"></ValidateComponent>
+        <ValidateComponent id="6">
+          <SomeComponent>
+            <ValidateComponent id="7"></ValidateComponent>
+          </SomeComponent>
+        </ValidateComponent>
       </ValidateComponent>
     </SomeComponent>
     <ValidateComponent id="5"></ValidateComponent>
@@ -18,7 +23,10 @@
 
   export default {
     name: "MainView",
-    components: { SomeComponent, ValidateComponent }
+    components: { SomeComponent, ValidateComponent },
+    mounted () {
+      this.$children[0].validate();
+    }
   };
 </script>
 

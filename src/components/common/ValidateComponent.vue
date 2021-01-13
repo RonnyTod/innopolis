@@ -13,22 +13,23 @@
         required: true
       }
     },
-    provide () {
-      return {
-        parent: this
-      };
-    },
-    inject: {
-      parent: { default: undefined }
-    },
-    mounted () {
-      if (this.parent?.$options.name === this.$options.name) {
-        this.validate(this.parent, this);
-      }
-    },
     methods: {
-      validate: (caller, called) => {
-        console.log(`id ${ caller.id }`, `called id ${ called.id }`);
+      validate (caller, called) {
+        if (caller && called) {
+          console.log(`id ${ caller.id }`, `called id ${ called.id }`);
+        }
+
+        this.getChildren((p, i) => i.validate(p, i), called);
+      },
+
+      getChildren (func, instance = this, rootInstance = this) {
+        for (const childInstance of instance.$children) {
+          if (rootInstance.$options.name === childInstance.$options.name) {
+            func(rootInstance, childInstance);
+          } else {
+            rootInstance.getChildren(func, childInstance, rootInstance);
+          }
+        }
       }
     }
   };
